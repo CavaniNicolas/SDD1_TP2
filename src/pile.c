@@ -4,37 +4,6 @@
 #include "pile.h"
 
 
-int main() {
-	pile_t * pile = initPile(10);
-	int valeur = 0;
-
-	if (pile != NULL) {
-
-		int i = 0;
-		while (i<30) {
-			empiler(pile, i);
-			printf("sommet : %d\n", pile->sommet);
-			i++;
-		}
-puts("");
-		printf("max %d\n", pile->capacite);
-		afficherPile(pile);
-		i=0;
-		while (i<25) {
-			depiler(pile, &valeur);
-			printf("sommet : %d\n", pile->sommet);
-			i++;
-		}
-puts("");
-		printf("max %d\n", pile->capacite);
-		afficherPile(pile);
-	}
-
-	libererPile(pile);
-	return 0;
-}
-
-
 pile_t * initPile(int capacite) {
 	pile_t * pile         = (pile_t *)malloc(sizeof(pile_t));
 
@@ -107,7 +76,7 @@ char depiler(pile_t * pile, int * valeur) {
 			int   nouvCapacite = 0.5 * pile->capacite;
 
 			nouvBase = realloc(pile->base, sizeof(int) * nouvCapacite);
-puts("yolo");
+
 			if (nouvBase != NULL) {
 				pile->base = nouvBase;
 				pile->capacite = nouvCapacite;
@@ -122,7 +91,6 @@ puts("yolo");
 
 void afficherPile(pile_t * pile) {
 	int i = 0;
-	printf("SOMMMMMMMMET : %d\n", pile->sommet);
 	for (i=0; i<=pile->sommet; i++) {
 		printf("%d\n", pile->base[i]);
 	}
