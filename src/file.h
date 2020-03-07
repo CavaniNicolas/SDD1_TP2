@@ -20,7 +20,13 @@ char enfiler(file_t * file, int valeur);
 char defiler(file_t * file, int * valeur);
 
 
+void redimensionnerFile(file_t * file, int * nouvBase, int nouvCapacite);
+
+
 void libererFile(file_t *);
+
+//
+void afficherFile(file_t *);
 
 
 #endif

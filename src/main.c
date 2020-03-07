@@ -18,12 +18,24 @@ void mainFile() {
 	int val = 0;
 
 	if (file != NULL) {
-		for (i=0; i<5; i++) {
-			enfiler(file, i);
+		for (i=0; i<10; i++) {
+			enfiler(file, i+1);
+
+			printf("AFFFFFFFFFFFFFFFF %d\n", file->capacite);
+			afficherFile(file);
 		}
-		for (i=0; i<5; i++) {
+
+		for (i=0; i<8; i++) {
 			defiler(file, &val);
+
+			printf("defil %d\n", file->base[file->indexSuppression]);
 		}
+
+		enfiler(file, 7);
+		enfiler(file, 8);
+
+		printf("\nAFFFFFFFFFFFFFFFF %d\n", file->capacite);
+		afficherFile(file);
 	}
 
 	libererFile(file);
