@@ -40,8 +40,8 @@ char empiler(pile_t * pile, int valeur) {
 		codeErreur = 0;
 
 	} else {
-		int * nouvBase   = NULL;
-		int nouvCapacite = 1.5 * pile->capacite;
+		int * nouvBase     = NULL;
+		int   nouvCapacite = 1.5 * pile->capacite;
 
 		nouvBase = realloc(pile->base, sizeof(int) * nouvCapacite);
 

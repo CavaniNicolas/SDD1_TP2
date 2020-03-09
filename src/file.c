@@ -52,7 +52,7 @@ char enfiler(file_t * file, int valeur) {
 
 
 char defiler(file_t * file, int * valeur) {
-	char codeErreur = 1;
+	char codeErreur = 2;
 
 	if (file->nbElements != 0) {
 		*valeur = file->base[file->indexSuppression];
@@ -65,7 +65,9 @@ char defiler(file_t * file, int * valeur) {
 			int   nouvCapacite = 0.5 * file->capacite;
 			int * nouvBase     = (int *)malloc(nouvCapacite * sizeof(int));
 
-			redimensionnerFile(file, nouvBase, nouvCapacite);
+			if (nouvBase != NULL) {
+				redimensionnerFile(file, nouvBase, nouvCapacite);
+			}
 		}
 
 	} else {
