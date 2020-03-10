@@ -3,12 +3,14 @@
 #include <stdlib.h>
 #include "pile.h"
 
+typedef int type;
+
 
 pile_t * initPile(int capacite) {
 	pile_t * pile         = (pile_t *)malloc(sizeof(pile_t));
 
 	if (pile != NULL) {
-		pile->base = (int *)malloc(capacite * sizeof(int));
+		pile->base = (int *)malloc(capacite * sizeof(type));
 		
 		if (pile->base == NULL) {
 			free(pile);
@@ -41,9 +43,9 @@ char empiler(pile_t * pile, int valeur) {
 
 	} else {
 		int * nouvBase     = NULL;
-		int   nouvCapacite = 1.5 * pile->capacite;
+		int   nouvCapacite = 1.5 * pile->capacite + 1;
 
-		nouvBase = realloc(pile->base, sizeof(int) * nouvCapacite);
+		nouvBase = realloc(pile->base, sizeof (int) * nouvCapacite);
 
 		if (nouvBase != NULL) {
 			pile->base = nouvBase;
@@ -73,9 +75,9 @@ char depiler(pile_t * pile, int * valeur) {
 
 		if (pile->sommet < 0.25 * pile->capacite) {
 			int * nouvBase = NULL;
-			int   nouvCapacite = 0.5 * pile->capacite;
+			int   nouvCapacite = 0.5 * pile->capacite + 1;
 
-			nouvBase = realloc(pile->base, sizeof(int) * nouvCapacite);
+			nouvBase = realloc(pile->base, sizeof(int) * (nouvCapacite));
 
 			if (nouvBase != NULL) {
 				pile->base = nouvBase;

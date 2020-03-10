@@ -62,7 +62,7 @@ char defiler(file_t * file, int * valeur) {
 
 
 		if (file->nbElements < 0.25 * file->capacite) {
-			int   nouvCapacite = 0.5 * file->capacite;
+			int   nouvCapacite = 0.5 * file->capacite + 1;
 			int * nouvBase     = (int *)malloc(nouvCapacite * sizeof(int));
 
 			if (nouvBase != NULL) {

@@ -3,11 +3,46 @@
 #include "pile.h"
 #include "file.h"
 
+void inverserPile();
 void mainFile();
 void mainPile();
 
+void inverserPile(pile_t * pile) {
+	int i         = 0;
+	int valeur    = 0;
+	int capacite  = pile->capacite;
+	file_t * file = initFile(capacite);
+	if (file != NULL) {
+		for (i=0; i<=capacite; i++) {
+			depiler(pile, &valeur);
+			enfiler(file, valeur);
+			puts("héhé");
+		}
+		for (i=0; i<=capacite; i++) {
+			defiler(file, &valeur);
+			empiler(pile, valeur);
+			puts("haha");
+		}
+	}
+}
+
+
+
 int main() {
-	mainFile();
+	int i = 1;
+	pile_t * pile = initPile(10);
+
+	while (i<=5) {
+		empiler(pile, i);
+		printf("sommet : %d\n", pile->sommet);
+		i++;
+	}
+	printf("capacite : %d\n", pile->capacite);
+	afficherPile(pile);
+	
+	inverserPile(pile);
+
+	afficherPile(pile);
 	return 0;
 }
 
