@@ -1,13 +1,15 @@
 #ifndef FILE_H
 #define FILE_H
 
+typedef int type;
+
 
 typedef struct file {
-	int   capacite;
-	int   nbElements;
-	int   indexInsertion;
-	int   indexSuppression;
-	int * base;
+	int    capacite;
+	int    nbElements;
+	int    indexInsertion;
+	int    indexSuppression;
+	type * base;
 }file_t;
 
 
@@ -30,7 +32,7 @@ file_t * initFile(int);
 /*                                                                    */
 /* En sortie :  codeErreur (char) booléen : 1 si erreur, 0 sinon      */
 /* ------------------------------------------------------------------ */
-char enfiler(file_t * file, int valeur);
+char enfiler(file_t * file, type valeur);
 
 
 /* -------------------------------------------------------------- */
@@ -42,7 +44,7 @@ char enfiler(file_t * file, int valeur);
 /*                                                                */
 /* En sortie :  codeErreur (char) booléen : 2 si erreur, 0 sinon  */
 /* -------------------------------------------------------------- */
-char defiler(file_t * file, int * valeur);
+char defiler(file_t * file, type * valeur);
 
 
 /* --------------------------------------------------------------------- */
@@ -55,7 +57,7 @@ char defiler(file_t * file, int * valeur);
 /*                                                                       */
 /* En sortie :  void                                                     */
 /* --------------------------------------------------------------------- */
-void redimensionnerFile(file_t * file, int * nouvBase, int nouvCapacite);
+void redimensionnerFile(file_t * file, type * nouvBase, int nouvCapacite);
 
 
 /* --------------------------------------------------------- */
@@ -71,5 +73,7 @@ void libererFile(file_t *);
 // fct à supprimer qui n'a servit qu'a observer les erreurs
 void afficherFile(file_t *);
 
+void afficherFileInt(file_t * file);
+void afficherFileChar(file_t * file);
 
 #endif

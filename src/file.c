@@ -13,7 +13,7 @@ file_t * initFile(int capacite) {
 		file->indexSuppression = 0;
 		file->indexInsertion   = 0;
 
-		file->base = (int *)malloc(capacite * sizeof(capacite));
+		file->base = (type *)malloc(capacite * sizeof(capacite));
 
 		if (file->base == NULL) {
 			free(file);
@@ -24,7 +24,7 @@ file_t * initFile(int capacite) {
 }
 
 
-char enfiler(file_t * file, int valeur) {
+char enfiler(file_t * file, type valeur) {
 	char codeErreur = 1;
 	int  suivInsere = (file->indexInsertion + 1) % file->capacite;
 
@@ -36,8 +36,8 @@ char enfiler(file_t * file, int valeur) {
 		codeErreur = 0;
 
 	} else {
-		int   nouvCapacite = 1.5 * file->capacite;
-		int * nouvBase     = (int *)malloc(nouvCapacite * sizeof(int));
+		int    nouvCapacite = 1.5 * file->capacite;
+		type * nouvBase     = (type *)malloc(nouvCapacite * sizeof(type));
 
 		if (nouvBase != NULL) {
 			redimensionnerFile(file, nouvBase, nouvCapacite);
@@ -51,7 +51,7 @@ char enfiler(file_t * file, int valeur) {
 }
 
 
-char defiler(file_t * file, int * valeur) {
+char defiler(file_t * file, type * valeur) {
 	char codeErreur = 2;
 
 	if (file->nbElements != 0) {
@@ -62,8 +62,8 @@ char defiler(file_t * file, int * valeur) {
 
 
 		if (file->nbElements < 0.25 * file->capacite) {
-			int   nouvCapacite = 0.5 * file->capacite + 1;
-			int * nouvBase     = (int *)malloc(nouvCapacite * sizeof(int));
+			int    nouvCapacite = 0.5 * file->capacite + 1;
+			type * nouvBase     = (type *)malloc(nouvCapacite * sizeof(type));
 
 			if (nouvBase != NULL) {
 				redimensionnerFile(file, nouvBase, nouvCapacite);
@@ -78,7 +78,7 @@ char defiler(file_t * file, int * valeur) {
 }
 
 
-void redimensionnerFile(file_t * file, int * nouvBase, int nouvCapacite) {
+void redimensionnerFile(file_t * file, type * nouvBase, int nouvCapacite) {
 	int i = 0;
 
 	for (i=0; i<file->nbElements; i++) {
@@ -102,9 +102,34 @@ void libererFile(file_t * file) {
 
 
 void afficherFile(file_t * file) {
+	int sizeInt = sizeof(int);
+	int sizeChar = sizeof(char);
+
+	int sizeType = sizeof(type);
+
+	if (sizeType == sizeInt)
+		afficherFileInt(file);
+	else if (sizeType == sizeChar)
+		afficherFileChar(file);
+	else
+		printf("pas de fonction afficher file");
+
+}
+
+
+void afficherFileInt(file_t * file) {
 	int cour = file->indexSuppression;
 	while (cour != file->indexInsertion) {
 		printf("AAAAA %d\n", file->base[cour]);
+		cour = (cour + 1) % file->capacite;
+	}
+}
+
+
+void afficherFileChar(file_t * file) {
+	int cour = file->indexSuppression;
+	while (cour != file->indexInsertion) {
+		printf("AAAAA %c\n", file->base[cour]);
 		cour = (cour + 1) % file->capacite;
 	}
 }

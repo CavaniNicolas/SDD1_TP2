@@ -1,11 +1,13 @@
 #ifndef PILE_H
 #define PILE_H
 
+typedef int type;
+
 
 typedef struct pile {
-	int capacite;
-	int sommet;
-	int * base;
+	int  capacite;
+	int  sommet;
+	type * base;
 }pile_t;
 
 
@@ -38,7 +40,7 @@ char estVide(pile_t *);
 /*                                                                    */
 /* En sortie :  codeErreur (char) booléen : 1 si erreur, 0 sinon      */
 /* ------------------------------------------------------------------ */
-char empiler(pile_t * pile, int valeur);
+char empiler(pile_t * pile, type valeur);
 
 
 /* ------------------------------------------------------------------ */
@@ -49,7 +51,7 @@ char empiler(pile_t * pile, int valeur);
 /*                                                                    */
 /* En sortie :  void                                                  */
 /* ------------------------------------------------------------------ */
-void empiler_valeur(pile_t * pile, int valeur);
+void empiler_valeur(pile_t * pile, type valeur);
 
 
 /* -------------------------------------------------------------- */
@@ -61,7 +63,7 @@ void empiler_valeur(pile_t * pile, int valeur);
 /*                                                                */
 /* En sortie :  codeErreur (char) booléen : 2 si erreur, 0 sinon  */
 /* -------------------------------------------------------------- */
-char depiler(pile_t * pile, int * valeur);
+char depiler(pile_t * pile, type * valeur);
 
 
 /* --------------------------------------------------------- */
@@ -72,6 +74,9 @@ char depiler(pile_t * pile, int * valeur);
 /* En sortie :  void                                         */
 /* --------------------------------------------------------- */
 void afficherPile(pile_t * pile);
+
+void afficherPileInt(pile_t * file);
+void afficherPileChar(pile_t * file); 
 
 
 /* --------------------------------------------------------- */
