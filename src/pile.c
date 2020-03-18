@@ -25,7 +25,7 @@ pile_t * initPile(int capacite) {
 }
 
 
-char estVide(pile_t * pile) {
+char estVidePile(pile_t * pile) {
 	char estVide = 1;
 	if (pile->sommet != -1)
 		estVide = 0;
@@ -71,7 +71,7 @@ char depiler(pile_t * pile, type * valeur) {
 	char codeErreur = 2; /*Code erreur*/
 
 	/* Si la pile n'est pas vide, on depile la valeur */
-	if (!estVide(pile)) {
+	if (!estVidePile(pile)) {
 		*valeur = pile->base[pile->sommet];
 		pile->sommet -= 1;
 		codeErreur = 0;
@@ -120,7 +120,7 @@ void afficherPile(pile_t * pile) {
 void afficherPileInt(pile_t * pile) {
 	int i = 0;
 
-	if (!estVide(pile)) {
+	if (!estVidePile(pile)) {
 		for (i=0; i<=pile->sommet; i++) {
 			printf("%d\n", pile->base[i]);
 		}
@@ -134,7 +134,7 @@ void afficherPileInt(pile_t * pile) {
 void afficherPileChar(pile_t * pile) {
 	int i = 0;
 
-	if (!estVide(pile)) {
+	if (!estVidePile(pile)) {
 		for (i=0; i<=pile->sommet; i++) {
 			printf("%c\n", pile->base[i]);
 		}

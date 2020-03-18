@@ -28,7 +28,7 @@ pile_t * initPile(int);
 /*                                                                       */
 /* En sortie :  estVide (char) booléen : 1 si la pile est vide, 0 sinon  */
 /* --------------------------------------------------------------------- */
-char estVide(pile_t *);
+char estVidePile(pile_t *);
 
 
 /* ------------------------------------------------------------------ */

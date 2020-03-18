@@ -23,6 +23,16 @@ typedef struct file {
 file_t * initFile(int);
 
 
+/* --------------------------------------------------------------------- */
+/* estVideFile  Indique si la file passée en paramètre est vide ou non   */
+/*                                                                       */
+/* En entrée :  file (file_t *) : file à tester                          */
+/*                                                                       */
+/* En sortie :  estVide (char) booléen : 1 si la file est vide, 0 sinon  */
+/* --------------------------------------------------------------------- */
+char estVideFile(file_t *);
+
+
 /* ------------------------------------------------------------------ */
 /* emfiler      Emfile une valeur à la fin de la file,                */
 /*                          et l'aggrandit si elle est trop petite    */

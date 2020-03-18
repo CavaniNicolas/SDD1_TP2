@@ -24,6 +24,15 @@ file_t * initFile(int capacite) {
 }
 
 
+char estVideFile(file_t * file) {
+	char estVide = 1;
+	if (file->nbElements != 0) {
+		estVide = 1;
+	}
+	return estVide;
+}
+
+
 char enfiler(file_t * file, type valeur) {
 	char codeErreur = 1;
 	int  suivInsere = (file->indexInsertion + 1) % file->capacite;
