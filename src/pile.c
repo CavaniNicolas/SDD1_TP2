@@ -14,6 +14,7 @@ pile_t * initPile(int capacite) {
 	if (pile != NULL) {
 		pile->base = (type *)malloc(capacite * sizeof(type));
 		
+		/* Erreur de memoire */
 		if (pile->base == NULL) {
 			free(pile);
 			pile = NULL;
@@ -56,6 +57,9 @@ char empiler(pile_t * pile, type valeur) {
 			pile->capacite = nouvCapacite;
 			empiler_valeur(pile, valeur);
 			codeErreur = 0;
+
+		} else {
+			printf("Memoire insuffisante\n");
 		}
 	}
 
@@ -80,7 +84,7 @@ char depiler(pile_t * pile, type * valeur) {
 		pile->sommet -= 1;
 		codeErreur = 0;
 
-		/* Apres depilement, si la pile est peu utilisée, on la redimmensionne */
+		/* Si la pile est peu utilisée, on la redimmensionne */
 		if (pile->sommet < 0.25 * pile->capacite) {
 			int    nouvCapacite = 0.5 * pile->capacite + 1;                                   /*Nouvelle capacite*/
 			type * nouvBase     = (type *)realloc(pile->base, sizeof(type) * (nouvCapacite)); /*Nouvelle base de la pile*/
@@ -91,6 +95,9 @@ char depiler(pile_t * pile, type * valeur) {
 				pile->capacite = nouvCapacite;
 			}
 		}
+
+	} else {
+		printf("Pile vide\n");
 	}
 
 	return codeErreur;
