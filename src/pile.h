@@ -1,3 +1,8 @@
+/* ---------------------------------------------------------------------------- */
+/*  pile.h                                                                      */
+/*          Contient les déclarations des fonctions du fichiers pile.c          */
+/* ---------------------------------------------------------------------------- */
+
 #ifndef PILE_H
 #define PILE_H
 
@@ -22,7 +27,7 @@ pile_t * initPile(int);
 
 
 /* --------------------------------------------------------------------- */
-/* estVide      Indique si la pile passée en paramètre est vide ou non   */
+/* estVidePile  Indique si la pile passée en paramètre est vide ou non   */
 /*                                                                       */
 /* En entrée :  pile (pile_t *) : pile à tester                          */
 /*                                                                       */
