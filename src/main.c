@@ -9,22 +9,29 @@ void mainFile();
 void mainPile();
 
 void inverserPile(pile_t * pile) {
-	int  i         = 0;
-	type valeur    = 0;
-	int  capacite  = pile->capacite;
-	file_t * file = initFile(capacite);
+	int  i        = 0;                 /*Compteur*/
+	type valeur   = 0;                 /*Valeur d'entrée/sortie de la pile ou file*/
+	int  nbElems  = pile->sommet;      /*Nombre d'elements dans la pile, à inverser*/
+	file_t * file = initFile(nbElems); /*File temporaire permettant d'inverser la pile*/
 
+	/* Inversion de la pile */
 	if (file != NULL) {
-		for (i=0; i<=capacite; i++) {
+		/* On vide la Pile, on rempli la File */
+		for (i=0; i<=nbElems; i++) {
 			depiler(pile, &valeur);
 			enfiler(file, valeur);
-			puts("héhé");
 		}
-		for (i=0; i<=capacite; i++) {
+
+		/* On vide la File, on rempli la Pile */
+		for (i=0; i<=nbElems; i++) {
 			defiler(file, &valeur);
 			empiler(pile, valeur);
-			puts("haha");
 		}
+
+		/* La pile est alors inversée */
+		printf("La pile est inversée\n");
+
+		libererFile(file);
 	}
 }
 
@@ -45,6 +52,8 @@ int main() {
 	inverserPile(pile);
 
 	afficherPile(pile);
+
+	libererPile(pile);
 	return 0;
 }
 

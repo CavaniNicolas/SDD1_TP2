@@ -5,7 +5,7 @@
 
 
 pile_t * initPile(int capacite) {
-	pile_t * pile         = (pile_t *)malloc(sizeof(pile_t));
+	pile_t * pile = (pile_t *)malloc(sizeof(pile_t)); /*Pile créée*/
 
 	if (pile != NULL) {
 		pile->base = (type *)malloc(capacite * sizeof(type));
@@ -14,6 +14,7 @@ pile_t * initPile(int capacite) {
 			free(pile);
 			pile = NULL;
 
+		/* Initialisation de la pile */
 		} else {
 			pile->capacite = capacite;
 			pile->sommet = -1;
@@ -33,18 +34,19 @@ char estVide(pile_t * pile) {
 
 
 char empiler(pile_t * pile, type valeur) {
-	char codeErreur = 1;
+	char codeErreur = 1; /*Code erreur*/
 
+	/* Si la pile n'est pas déjà rempli, on empile la valeur */
 	if (pile->sommet < pile->capacite - 1) {
 		empiler_valeur(pile, valeur);
 		codeErreur = 0;
 
+	/* Sinon, il faut redimmensionner la pile */
 	} else {
-		type * nouvBase     = NULL;
-		int    nouvCapacite = 1.5 * pile->capacite + 1;
+		int    nouvCapacite = 1.5 * pile->capacite + 1;                                  /*Nouvelle capacité*/
+		type * nouvBase     = (type *)realloc(pile->base, sizeof (type) * nouvCapacite); /*Nouvelle base de la pile*/
 
-		nouvBase = (type *)realloc(pile->base, sizeof (type) * nouvCapacite);
-
+		/* Si la redimmension est sans erreur, on actualise les données de la pile et on empile la valeur */
 		if (nouvBase != NULL) {
 			pile->base = nouvBase;
 			pile->capacite = nouvCapacite;
@@ -58,32 +60,34 @@ char empiler(pile_t * pile, type valeur) {
 
 
 void empiler_valeur(pile_t * pile, type valeur) {
+	/* Empile réellement la valeur au sommet de la pile */
+	/* Cette fonction est appelée que si l'on est sur qu'il y a la place */
 	pile->sommet += 1;
 	pile->base[pile->sommet] = valeur;
 }
 
 
 char depiler(pile_t * pile, type * valeur) {
-	char codeErreur = 2;
+	char codeErreur = 2; /*Code erreur*/
 
+	/* Si la pile n'est pas vide, on depile la valeur */
 	if (!estVide(pile)) {
 		*valeur = pile->base[pile->sommet];
 		pile->sommet -= 1;
 		codeErreur = 0;
 
+		/* Apres depilement, si la pile est peu utilisée, on la redimmensionne */
 		if (pile->sommet < 0.25 * pile->capacite) {
-			type * nouvBase = NULL;
-			int    nouvCapacite = 0.5 * pile->capacite + 1;
+			int    nouvCapacite = 0.5 * pile->capacite + 1;                                   /*Nouvelle capacite*/
+			type * nouvBase     = (type *)realloc(pile->base, sizeof(type) * (nouvCapacite)); /*Nouvelle base de la pile*/
 
-			nouvBase = (type *)realloc(pile->base, sizeof(type) * (nouvCapacite));
-
+			/* Si la redimmension est sans erreur, on actualise les données de la pile */
 			if (nouvBase != NULL) {
 				pile->base = nouvBase;
 				pile->capacite = nouvCapacite;
 			}
 		}
 	}
-
 
 	return codeErreur;
 }
@@ -98,7 +102,7 @@ void libererPile(pile_t * pile) {
 
 
 void afficherPile(pile_t * pile) {
-	int sizeInt = sizeof(int);
+	int sizeInt  = sizeof(int);
 	int sizeChar = sizeof(char);
 
 	int sizeType = sizeof(type);
@@ -115,15 +119,27 @@ void afficherPile(pile_t * pile) {
 
 void afficherPileInt(pile_t * pile) {
 	int i = 0;
-	for (i=0; i<=pile->sommet; i++) {
-		printf("%d\n", pile->base[i]);
+
+	if (!estVide(pile)) {
+		for (i=0; i<=pile->sommet; i++) {
+			printf("%d\n", pile->base[i]);
+		}
+
+	} else {
+		printf("Pile vide\n");
 	}
 }
 
 
 void afficherPileChar(pile_t * pile) {
 	int i = 0;
-	for (i=0; i<=pile->sommet; i++) {
-		printf("%c\n", pile->base[i]);
+
+	if (!estVide(pile)) {
+		for (i=0; i<=pile->sommet; i++) {
+			printf("%c\n", pile->base[i]);
+		}
+
+	} else {
+		printf("Pile vide\n");
 	}
 }
