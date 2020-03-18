@@ -1,3 +1,7 @@
+/* ---------------------------------------------------------------------------- */
+/*  file.c                                                                      */
+/*                  Contient les fonctions associées à la file                  */
+/* ---------------------------------------------------------------------------- */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,18 +9,22 @@
 
 
 file_t * initFile(int capacite) {
-	file_t * file = (file_t *)malloc(sizeof(file_t));
+	file_t * file = (file_t *)malloc(sizeof(file_t)); /*File créée*/
 
 	if (file != NULL) {
-		file->capacite         = capacite;
-		file->nbElements       = 0;
-		file->indexSuppression = 0;
-		file->indexInsertion   = 0;
-
 		file->base = (type *)malloc(capacite * sizeof(capacite));
 
+		/* Erreur de memoire */
 		if (file->base == NULL) {
 			free(file);
+			file = NULL;
+
+		/* Initialisation de la file */
+		} else {
+			file->capacite         = capacite;
+			file->nbElements       = 0;
+			file->indexSuppression = 0;
+			file->indexInsertion   = 0;
 		}
 	}
 
@@ -34,9 +42,10 @@ char estVideFile(file_t * file) {
 
 
 char enfiler(file_t * file, type valeur) {
-	char codeErreur = 1;
-	int  suivInsere = (file->indexInsertion + 1) % file->capacite;
+	char codeErreur = 1;                                           /*Code erreur*/
+	int  suivInsere = (file->indexInsertion + 1) % file->capacite; /*Index d'insertion*/
 
+	/* Si la file n'est pas déjà remplie, on enfile la valeur */
 	if (file->nbElements != file->capacite) {
 		file->base[file->indexInsertion] = valeur;
 		file->indexInsertion = suivInsere;
@@ -44,10 +53,12 @@ char enfiler(file_t * file, type valeur) {
 		file->nbElements += 1;
 		codeErreur = 0;
 
+	/* Sinon, il faut redimmensionner la file */
 	} else {
 		int    nouvCapacite = 1.5 * file->capacite;
 		type * nouvBase     = (type *)malloc(nouvCapacite * sizeof(type));
 
+		/* Si l'allocation est sans erreur, on redimmensionne la file et on enfile la valeur */
 		if (nouvBase != NULL) {
 			redimensionnerFile(file, nouvBase, nouvCapacite);
 			enfiler(file, valeur);
@@ -61,26 +72,28 @@ char enfiler(file_t * file, type valeur) {
 
 
 char defiler(file_t * file, type * valeur) {
-	char codeErreur = 2;
+	char codeErreur = 2; /*Code erreur*/
 
-	if (file->nbElements != 0) {
+	/* Si la file n'est pas vide, on defile la valeur */
+	if (!estVideFile(file)) {
 		*valeur = file->base[file->indexSuppression];
 		file->indexSuppression = (file->indexSuppression + 1) % file->capacite;
 		file->nbElements -= 1;
 		codeErreur = 0;
 
-
+		/* Si la file est peu utilisée, on la redimmensionne */
 		if (file->nbElements < 0.25 * file->capacite) {
 			int    nouvCapacite = 0.5 * file->capacite + 1;
 			type * nouvBase     = (type *)malloc(nouvCapacite * sizeof(type));
 
+			/* Si l'allocation est sans erreur, on redimmensionne la file */
 			if (nouvBase != NULL) {
 				redimensionnerFile(file, nouvBase, nouvCapacite);
 			}
 		}
 
 	} else {
-		printf("file vide\n");
+		printf("File vide\n");
 	}
 
 	return codeErreur;
@@ -88,12 +101,14 @@ char defiler(file_t * file, type * valeur) {
 
 
 void redimensionnerFile(file_t * file, type * nouvBase, int nouvCapacite) {
-	int i = 0;
+	int i = 0; /*Compteur*/
 
+	/* On copie l'ancienne file dans la nouvelle (redimmensionnée) */
 	for (i=0; i<file->nbElements; i++) {
 		nouvBase[i] = file->base[file->indexSuppression + i];
 	}
 
+	/* On libère l'ancienne file et on actualise les données de la nouvelle */
 	free(file->base);
 	file->base = nouvBase;
 
@@ -128,17 +143,29 @@ void afficherFile(file_t * file) {
 
 void afficherFileInt(file_t * file) {
 	int cour = file->indexSuppression;
-	while (cour != file->indexInsertion) {
-		printf("AAAAA %d\n", file->base[cour]);
-		cour = (cour + 1) % file->capacite;
+
+	if (!estVideFile(file)) {
+		while (cour != file->indexInsertion) {
+			printf("%d\n", file->base[cour]);
+			cour = (cour + 1) % file->capacite;
+		}
+
+	} else {
+		printf("File vide\n");
 	}
 }
 
 
 void afficherFileChar(file_t * file) {
 	int cour = file->indexSuppression;
-	while (cour != file->indexInsertion) {
-		printf("AAAAA %c\n", file->base[cour]);
-		cour = (cour + 1) % file->capacite;
+
+	if (!estVideFile(file)) {
+		while (cour != file->indexInsertion) {
+			printf("%c\n", file->base[cour]);
+			cour = (cour + 1) % file->capacite;
+		}
+
+	} else {
+		printf("File vide\n");
 	}
 }
