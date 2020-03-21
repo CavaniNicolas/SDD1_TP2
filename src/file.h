@@ -67,12 +67,11 @@ char defiler(file_t * file, type * valeur);
 /*                          et la réduit si elle peu utilisée            */
 /*                                                                       */
 /* En entrée :  file (file_t *)    : file à redimmensionner              */
-/*              nouvBase (int *)   : base de la nouvelle file à remplir  */
 /*              nouvCapacite (int) : taille de la nouvelle file          */
 /*                                                                       */
-/* En sortie :  void                                                     */
+/* En sortie :  codeErreur (char) booléen : 1 si erreur, 0 sinon         */
 /* --------------------------------------------------------------------- */
-void redimensionnerFile(file_t * file, type * nouvBase, int nouvCapacite);
+char redimensionnerFile(file_t * file, int nouvCapacite);
 
 
 /* --------------------------------------------------------- */

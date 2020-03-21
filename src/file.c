@@ -35,7 +35,7 @@ file_t * initFile(int capacite) {
 char estVideFile(file_t * file) {
 	char estVide = 1;
 	if (file->nbElements != 0) {
-		estVide = 1;
+		estVide = 0;
 	}
 	return estVide;
 }
@@ -43,29 +43,30 @@ char estVideFile(file_t * file) {
 
 char enfiler(file_t * file, type valeur) {
 	char codeErreur = 1;                                           /*Code erreur*/
-	int  suivInsere = (file->indexInsertion + 1) % file->capacite; /*Index d'insertion*/
+	int  suivInsere = (file->indexInsertion + 1) % file->capacite; /*Index d'insertion suivante*/
 
 	/* Si la file n'est pas déjà remplie, on enfile la valeur */
-	if (file->nbElements != file->capacite) {
+	if (file->nbElements <= file->capacite) {
 		file->base[file->indexInsertion] = valeur;
 		file->indexInsertion = suivInsere;
 
 		file->nbElements += 1;
 		codeErreur = 0;
 
-	/* Sinon, il faut redimmensionner la file */
+	/* Sinon, il faut redimensionner la file */
 	} else {
-		int    nouvCapacite = 1.5 * file->capacite;
-		type * nouvBase     = (type *)malloc(nouvCapacite * sizeof(type));
+		int nouvCapacite = 1.5 * file->capacite;
 
-		/* Si l'allocation est sans erreur, on redimmensionne la file et on enfile la valeur */
-		if (nouvBase != NULL) {
-			redimensionnerFile(file, nouvBase, nouvCapacite);
-			enfiler(file, valeur);
+		/* Si la redimension est sans erreur, on enfile la valeur */
+		if (redimensionnerFile(file, nouvCapacite)) {
+			printf("Redimensionnement impossible\n");
+			codeErreur = 1;
 
 		} else {
-			printf("Memoire insufisante\n");
+			enfiler(file, valeur);
+			codeErreur = 0;
 		}
+
 	}
 	return codeErreur;
 }
@@ -81,14 +82,17 @@ char defiler(file_t * file, type * valeur) {
 		file->nbElements -= 1;
 		codeErreur = 0;
 
-		/* Si la file est peu utilisée, on la redimmensionne */
+		/* Si la file est peu utilisée, on la redimensionne */
 		if (file->nbElements < 0.25 * file->capacite) {
-			int    nouvCapacite = 0.5 * file->capacite + 1;
-			type * nouvBase     = (type *)malloc(nouvCapacite * sizeof(type));
+			int nouvCapacite = 0.5 * file->capacite + 1;
+			
+			if (redimensionnerFile(file, nouvCapacite)) {
+				printf("Redimensionnement impossible\n");
+				codeErreur = 2;
 
-			/* Si l'allocation est sans erreur, on redimmensionne la file */
-			if (nouvBase != NULL) {
-				redimensionnerFile(file, nouvBase, nouvCapacite);
+			} else {
+				/* Tout a bien fonctionné */
+				codeErreur = 0;
 			}
 		}
 
@@ -100,21 +104,30 @@ char defiler(file_t * file, type * valeur) {
 }
 
 
-void redimensionnerFile(file_t * file, type * nouvBase, int nouvCapacite) {
-	int i = 0; /*Compteur*/
+char redimensionnerFile(file_t * file, int nouvCapacite) {
+	char codeErreur = 1; /*Code Erreur*/
+	int  i          = 0; /*Compteur*/
 
-	/* On copie l'ancienne file dans la nouvelle (redimmensionnée) */
-	for (i=0; i<file->nbElements; i++) {
-		nouvBase[i] = file->base[file->indexSuppression + i];
+	type * nouvBase = (type *)malloc(nouvCapacite * sizeof(type));
+	
+	/* Si l'allocation est sans erreur, on copie la file */
+	if (nouvBase != NULL) {
+		/* On copie l'ancienne file dans la nouvelle (redimensionnée) */
+		for (i=0; i<file->nbElements; i++) {
+			nouvBase[i] = file->base[(file->indexSuppression + i) % file->capacite];
+		}
+
+		/* On libère l'ancienne file et on actualise les données de la nouvelle */
+		free(file->base);
+		file->base = nouvBase;
+
+		file->indexSuppression = 0;
+		file->indexInsertion   = file->nbElements;
+		file->capacite = nouvCapacite;
+
+		codeErreur = 0;
 	}
-
-	/* On libère l'ancienne file et on actualise les données de la nouvelle */
-	free(file->base);
-	file->base = nouvBase;
-
-	file->indexSuppression = 0;
-	file->indexInsertion   = file->nbElements;
-	file->capacite = nouvCapacite;
+	return codeErreur;
 }
 
 
@@ -145,10 +158,10 @@ void afficherFileInt(file_t * file) {
 	int cour = file->indexSuppression;
 
 	if (!estVideFile(file)) {
-		while (cour != file->indexInsertion) {
+		do {
 			printf("%d\n", file->base[cour]);
 			cour = (cour + 1) % file->capacite;
-		}
+		} while (cour != file->indexInsertion);
 
 	} else {
 		printf("File vide\n");
@@ -160,10 +173,10 @@ void afficherFileChar(file_t * file) {
 	int cour = file->indexSuppression;
 
 	if (!estVideFile(file)) {
-		while (cour != file->indexInsertion) {
+		do {
 			printf("%c\n", file->base[cour]);
 			cour = (cour + 1) % file->capacite;
-		}
+		} while (cour != file->indexInsertion);
 
 	} else {
 		printf("File vide\n");
