@@ -65,7 +65,7 @@ int main() {
 
 
 
-void mainFile() {
+/*void mainFile() {
 	file_t * file = initFile(6);
 	int i = 0;
 	type val = 0;
@@ -123,3 +123,4 @@ puts("");
 
 	libererPile(pile);
 }
+*/

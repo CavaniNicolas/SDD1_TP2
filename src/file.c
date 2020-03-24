@@ -33,22 +33,22 @@ file_t * initFile(int capacite) {
 
 
 char estVideFile(file_t * file) {
-	char estVide = 1;
-	if (file->nbElements != 0) {
-		estVide = 0;
-	}
-	return estVide;
+	return (file->nbElements == 0);
+}
+
+
+char estPleineFile(file_t * file) {
+	return (file->nbElements == file->capacite);
 }
 
 
 char enfiler(file_t * file, type valeur) {
-	char codeErreur = 1;                                           /*Code erreur*/
-	int  suivInsere = (file->indexInsertion + 1) % file->capacite; /*Index d'insertion suivante*/
+	char codeErreur = 1; /*Code erreur*/
 
 	/* Si la file n'est pas déjà remplie, on enfile la valeur */
-	if (file->nbElements <= file->capacite) {
+	if (!estPleineFile(file)) {
 		file->base[file->indexInsertion] = valeur;
-		file->indexInsertion = suivInsere;
+		file->indexInsertion = (file->indexInsertion + 1) % file->capacite; /*Index d'insertion suivante*/
 
 		file->nbElements += 1;
 		codeErreur = 0;
@@ -85,14 +85,10 @@ char defiler(file_t * file, type * valeur) {
 		/* Si la file est peu utilisée, on la redimensionne */
 		if (file->nbElements < 0.25 * file->capacite) {
 			int nouvCapacite = 0.5 * file->capacite + 1;
-			
+
 			if (redimensionnerFile(file, nouvCapacite)) {
 				printf("Redimensionnement impossible\n");
 				codeErreur = 2;
-
-			} else {
-				/* Tout a bien fonctionné */
-				codeErreur = 0;
 			}
 		}
 
@@ -121,8 +117,9 @@ char redimensionnerFile(file_t * file, int nouvCapacite) {
 		free(file->base);
 		file->base = nouvBase;
 
+		/* On actualise les données de la file */
 		file->indexSuppression = 0;
-		file->indexInsertion   = file->nbElements;
+		file->indexInsertion = file->nbElements;
 		file->capacite = nouvCapacite;
 
 		codeErreur = 0;
@@ -138,30 +135,13 @@ void libererFile(file_t * file) {
 }
 
 
-void afficherFile(file_t * file) {
-	int sizeInt = sizeof(int);
-	int sizeChar = sizeof(char);
-
-	int sizeType = sizeof(type);
-
-	if (sizeType == sizeInt)
-		afficherFileInt(file);
-	else if (sizeType == sizeChar)
-		afficherFileChar(file);
-	else
-		printf("pas de fonction afficher file");
-
-}
-
-
-void afficherFileInt(file_t * file) {
-	int cour = file->indexSuppression;
+void afficherFile(file_t * file, void (*pfAfficher) (type)) {
+	int i = 0; /*Compteur*/
 
 	if (!estVideFile(file)) {
-		do {
-			printf("%d\n", file->base[cour]);
-			cour = (cour + 1) % file->capacite;
-		} while (cour != file->indexInsertion);
+		for (i=0; i<file->nbElements; i++) {
+			pfAfficher(file->base[(file->indexSuppression + i) % file->capacite]);
+		}
 
 	} else {
 		printf("File vide\n");
@@ -169,16 +149,16 @@ void afficherFileInt(file_t * file) {
 }
 
 
-void afficherFileChar(file_t * file) {
-	int cour = file->indexSuppression;
+void afficherFileInt(int nombre) {
+	printf("%d\n", nombre);
+}
 
-	if (!estVideFile(file)) {
-		do {
-			printf("%c\n", file->base[cour]);
-			cour = (cour + 1) % file->capacite;
-		} while (cour != file->indexInsertion);
 
-	} else {
-		printf("File vide\n");
-	}
+void afficherFileChar(char caractere) {
+	printf("%c\n", caractere);
+}
+
+
+void afficherFileChaineChar(char * chaine) {
+	printf("%s\n", chaine);
 }

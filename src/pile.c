@@ -14,7 +14,7 @@ pile_t * initPile(int capacite) {
 	if (pile != NULL) {
 		pile->base = (type *)malloc(capacite * sizeof(type));
 		
-		/* Erreur de memoire */
+		/* Erreur allocation impossible */
 		if (pile->base == NULL) {
 			free(pile);
 			pile = NULL;

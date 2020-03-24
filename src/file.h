@@ -6,9 +6,15 @@
 #ifndef FILE_H
 #define FILE_H
 
+/* ------------ */
+/* Type utilisé */
+/* ------------ */
 typedef int type;
 
 
+/* -------------------- */
+/* Structure de la file */
+/* -------------------- */
 typedef struct file {
 	int    capacite;
 	int    nbElements;
@@ -33,9 +39,19 @@ file_t * initFile(int);
 /*                                                                       */
 /* En entrée :  file (file_t *) : file à tester                          */
 /*                                                                       */
-/* En sortie :  estVide (char) booléen : 1 si la file est vide, 0 sinon  */
+/* En sortie :  (char) booléen : 1 si la file est vide, 0 sinon          */
 /* --------------------------------------------------------------------- */
 char estVideFile(file_t *);
+
+
+/* ------------------------------------------------------------------------ */
+/* estPleineFile  Indique si la file passée en paramètre est pleine ou non  */
+/*                                                                          */
+/* En entrée :  file (file_t *) : file à tester                             */
+/*                                                                          */
+/* En sortie :  (char) booléen : 1 si la file est pleine, 0 sinon           */
+/* ------------------------------------------------------------------------ */
+char estPleineFile(file_t * file);
 
 
 /* ------------------------------------------------------------------ */
@@ -81,13 +97,14 @@ char redimensionnerFile(file_t * file, int nouvCapacite);
 /*                                                           */
 /* En sortie :  void                                         */
 /* --------------------------------------------------------- */
-void libererFile(file_t *);
+void libererFile(file_t * file);
 
 
-// fct à supprimer qui n'a servit qu'a observer les erreurs
-void afficherFile(file_t *);
 
-void afficherFileInt(file_t * file);
-void afficherFileChar(file_t * file);
+void afficherFile(file_t * file, void (*pfAfficher) (type));
+
+void afficherFileInt(int nombre);
+void afficherFileChar(char caractere);
+void afficherFileChaineChar(char * chaine);
 
 #endif
